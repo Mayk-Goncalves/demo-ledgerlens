@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+# Yarn
+.yarn/
+
 # Expo
 .expo/
 dist/
