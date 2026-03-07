@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -23,9 +24,17 @@ export function Header({ children, bottomPadding = 0 }: HeaderProps) {
           <Text className="font-light text-emerald-200">Lens</Text>
         </Text>
         <View className="flex-row items-center gap-4">
-          <Text className="text-xl">🔔</Text>
+          <MaterialCommunityIcons
+            name="bell-outline"
+            size={22}
+            color="#ffffff"
+          />
           <View className="items-center justify-center rounded-full h-9 w-9 bg-white/20">
-            <Text className="text-base">👤</Text>
+            <MaterialCommunityIcons
+              name="account-circle-outline"
+              size={20}
+              color="#ffffff"
+            />
           </View>
         </View>
       </View>

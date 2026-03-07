@@ -1,20 +1,28 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { memo } from "react";
 import { Text, View } from "react-native";
 
 import { formatCents } from "@/lib/format";
 import type { Transaction } from "@/types/transaction";
 
-/** Emoji icon for a given transaction category. */
-const CATEGORY_ICONS: Record<string, string> = {
-  food: "🍔",
-  transport: "🚗",
-  entertainment: "🎬",
-  shopping: "🛍️",
-  salary: "💰",
-  freelance: "💼",
+type IconName = React.ComponentProps<typeof MaterialCommunityIcons>["name"];
+
+/** Icon name for a given transaction category. */
+const CATEGORY_ICONS: Record<string, IconName> = {
+  food: "food",
+  transport: "car",
+  entertainment: "movie-open-outline",
+  shopping: "shopping-outline",
+  salary: "cash-multiple",
+  freelance: "briefcase-outline",
+  housing: "home-outline",
+  utilities: "lightning-bolt-outline",
+  health: "heart-pulse",
+  education: "school-outline",
+  other: "swap-horizontal",
 };
 
-const DEFAULT_ICON = "💸";
+const DEFAULT_ICON: IconName = "swap-horizontal";
 
 /** Sign prefix by transaction type. */
 const SIGN: Record<string, string> = {
@@ -38,7 +46,7 @@ export const TransactionRow = memo(function TransactionRow({
   return (
     <View className="mb-2.5 flex-row items-center rounded-xl bg-white p-4 shadow-sm">
       <View className="items-center justify-center w-10 h-10 rounded-full bg-emerald-50">
-        <Text className="text-lg">{icon}</Text>
+        <MaterialCommunityIcons name={icon} size={20} color="#059669" />
       </View>
       <View className="flex-1 ml-3">
         <Text className="text-sm font-medium text-gray-800 capitalize">

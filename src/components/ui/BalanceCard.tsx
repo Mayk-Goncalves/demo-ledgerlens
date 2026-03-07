@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useCallback, useState } from "react";
 import { Pressable, Text, View, type LayoutChangeEvent } from "react-native";
 
@@ -79,9 +80,11 @@ export function BalanceCard({
           onPress={() => setVisible((v) => !v)}
           className="active:opacity-70"
         >
-          <Text className="text-sm text-emerald-300">
-            {visible ? "👁" : "👁‍🗨"}
-          </Text>
+          <MaterialCommunityIcons
+            name={visible ? "eye-outline" : "eye-off-outline"}
+            size={18}
+            color="#6ee7b7"
+          />
         </Pressable>
       </View>
       <Text className="mt-1 text-4xl font-bold text-white">

@@ -1,16 +1,19 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useCallback, useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 
 import type { TransactionType } from "@/types/transaction";
 
+type IconName = React.ComponentProps<typeof MaterialCommunityIcons>["name"];
+
 const ACTIONS: readonly {
   type: TransactionType;
   label: string;
-  icon: string;
+  icon: IconName;
 }[] = [
-  { type: "credit_card", label: "Credit Card", icon: "💳" },
-  { type: "expense", label: "Expense", icon: "💸" },
-  { type: "income", label: "Income", icon: "💰" },
+  { type: "credit_card", label: "Credit Card", icon: "credit-card-outline" },
+  { type: "expense", label: "Expense", icon: "arrow-up-circle-outline" },
+  { type: "income", label: "Income", icon: "arrow-down-circle-outline" },
 ];
 
 const ANIMATION_DURATION = 200;
@@ -125,7 +128,11 @@ export function AddTransactionFAB({ onSelect }: AddTransactionFABProps) {
                 style={{ width: ACTION_SIZE, height: ACTION_SIZE }}
                 className="items-center justify-center rounded-full bg-emerald-600 shadow-lg active:bg-emerald-700"
               >
-                <Text className="text-lg">{action.icon}</Text>
+                <MaterialCommunityIcons
+                  name={action.icon}
+                  size={22}
+                  color="#ffffff"
+                />
               </Pressable>
               <View className="mr-2 rounded-lg bg-gray-800 px-3 py-1.5">
                 <Text className="text-xs font-medium text-white">
