@@ -28,10 +28,15 @@ function generateId(): string {
 
 /** Map a raw DB row to a Transaction domain object. */
 function mapRowToTransaction(row: TransactionRow): Transaction {
-  const location =
-    row.latitude != null && row.longitude != null
-      ? { latitude: row.latitude, longitude: row.longitude }
-      : undefined;
+  const hasLocation =
+    row.place_name != null || (row.latitude != null && row.longitude != null);
+  const location: Transaction["location"] = hasLocation
+    ? {
+        placeName: row.place_name ?? undefined,
+        latitude: row.latitude ?? undefined,
+        longitude: row.longitude ?? undefined,
+      }
+    : undefined;
 
   return {
     id: row.id,
@@ -52,12 +57,12 @@ export async function insertTransaction(
 ): Promise<Transaction> {
   const db = getDatabase();
   const id = generateId();
-  const createdAt = Date.now();
+  const createdAt = input.createdAt ?? Date.now();
   const currency = input.currency ?? DEFAULT_CURRENCY;
 
   await db.runAsync(
-    `INSERT INTO ${TABLE} (id, type, amount, currency, category, note, receipt_uri, latitude, longitude, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO ${TABLE} (id, type, amount, currency, category, note, receipt_uri, place_name, latitude, longitude, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     id,
     input.type,
     input.amount,
@@ -65,6 +70,7 @@ export async function insertTransaction(
     input.category,
     input.note ?? null,
     input.receiptUri ?? null,
+    input.location?.placeName ?? null,
     input.location?.latitude ?? null,
     input.location?.longitude ?? null,
     createdAt,

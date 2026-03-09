@@ -1,17 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 
-import { AddTransactionFAB } from "@/components/ui/AddTransactionFAB";
 import { BalanceCard } from "@/components/ui/BalanceCard";
 import { Header } from "@/components/ui/Header";
 import { MonthPicker } from "@/components/ui/MonthPicker";
-import { TransactionList } from "@/features/transactions/TransactionList";
+import { AddTransactionFAB } from "@/features/transactions/components/AddTransactionFAB";
+import { TransactionList } from "@/features/transactions/components/TransactionList";
+import { AddExpenseModal } from "@/features/transactions/modals/AddExpenseModal";
+import { AddIncomeModal } from "@/features/transactions/modals/AddIncomeModal";
+import { insertTransaction } from "@/features/transactions/storage";
 import { initDatabase } from "@/lib/database";
 import { useFinanceStore } from "@/stores/finance";
-import type { TransactionType } from "@/types/transaction";
+import type {
+  TransactionCategory,
+  TransactionLocation,
+  TransactionType,
+} from "@/types/transaction";
 
 export default function Home() {
   const [cardBleed, setCardBleed] = useState(0);
+  const [showIncomeModal, setShowIncomeModal] = useState(false);
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
 
   const { year, month, transactions, summary, loading, reload, setMonth } =
     useFinanceStore();
@@ -41,9 +50,69 @@ export default function Home() {
     setMonth(now.getFullYear(), now.getMonth() + 1);
   }, [setMonth]);
 
+  const handleSaveIncome = useCallback(
+    async (data: {
+      amountCents: number;
+      category: TransactionCategory;
+      description: string;
+      note: string;
+      timestamp: number;
+      receiptUri?: string;
+      location?: TransactionLocation;
+    }) => {
+      await insertTransaction({
+        type: "income",
+        amount: data.amountCents,
+        category: data.category,
+        note:
+          [data.description, data.note].filter(Boolean).join(" — ") ||
+          undefined,
+        receiptUri: data.receiptUri,
+        location: data.location,
+        createdAt: data.timestamp,
+      });
+      await reload();
+      setShowIncomeModal(false);
+    },
+    [reload],
+  );
+
+  const handleSaveExpense = useCallback(
+    async (data: {
+      amountCents: number;
+      category: TransactionCategory;
+      description: string;
+      note: string;
+      timestamp: number;
+      receiptUri?: string;
+      location?: TransactionLocation;
+    }) => {
+      await insertTransaction({
+        type: "expense",
+        amount: data.amountCents,
+        category: data.category,
+        note:
+          [data.description, data.note].filter(Boolean).join(" — ") ||
+          undefined,
+        receiptUri: data.receiptUri,
+        location: data.location,
+        createdAt: data.timestamp,
+      });
+      await reload();
+      setShowExpenseModal(false);
+    },
+    [reload],
+  );
+
   const handleAddTransaction = useCallback((type: TransactionType) => {
-    // TODO: navigate to add-transaction form
-    Alert.alert("Add Transaction", `Type: ${type}`);
+    switch (type) {
+      case "income":
+        setShowIncomeModal(true);
+        break;
+      case "expense":
+        setShowExpenseModal(true);
+        break;
+    }
   }, []);
 
   return (
@@ -63,14 +132,29 @@ export default function Home() {
           balanceCents={summary.balance}
           incomeCents={summary.income}
           expensesCents={summary.expenses}
-          creditCardCents={summary.creditCard}
           onBleedMeasured={handleBleedMeasured}
         />
 
-        <TransactionList transactions={transactions} loading={loading} />
+        <TransactionList
+          transactions={transactions}
+          loading={loading}
+          onRefresh={reload}
+        />
       </View>
 
       <AddTransactionFAB onSelect={handleAddTransaction} />
+
+      <AddIncomeModal
+        visible={showIncomeModal}
+        onClose={() => setShowIncomeModal(false)}
+        onSave={handleSaveIncome}
+      />
+
+      <AddExpenseModal
+        visible={showExpenseModal}
+        onClose={() => setShowExpenseModal(false)}
+        onSave={handleSaveExpense}
+      />
     </View>
   );
 }

@@ -1,20 +1,38 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ScrollView, Text, View } from "react-native";
+import { useMemo } from "react";
+import { RefreshControl, ScrollView, Text, View } from "react-native";
 
 import type { Transaction } from "@/types/transaction";
+import { groupByDay } from "@/utils/transactions";
 
 import { TransactionRow } from "./TransactionRow";
 
 interface TransactionListProps {
   readonly transactions: readonly Transaction[];
   readonly loading: boolean;
+  readonly onRefresh: () => void;
 }
 
-/** Scrollable feed of recent transactions with empty / loading states. */
+/** Scrollable feed of recent transactions grouped by day. */
 export function TransactionList({
   transactions,
   loading,
+  onRefresh,
 }: TransactionListProps) {
+  const groups = useMemo(() => groupByDay(transactions), [transactions]);
+
+  const refreshControl = useMemo(
+    () => (
+      <RefreshControl
+        refreshing={loading}
+        onRefresh={onRefresh}
+        tintColor="#059669"
+        colors={["#059669"]}
+      />
+    ),
+    [loading, onRefresh],
+  );
+
   return (
     <View className="flex-1 mt-4">
       <View className="flex-row items-center justify-between">
@@ -26,9 +44,21 @@ export function TransactionList({
         </Text>
       </View>
 
-      <ScrollView className="flex-1 mt-3" showsVerticalScrollIndicator={false}>
-        {transactions.map((tx) => (
-          <TransactionRow key={tx.id} transaction={tx} />
+      <ScrollView
+        className="flex-1 mt-3"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 96 }}
+        refreshControl={refreshControl}
+      >
+        {groups.map((group) => (
+          <View key={group.label} className="mb-2">
+            <Text className="mb-2 text-xs font-semibold tracking-widest text-gray-400 uppercase">
+              {group.label}
+            </Text>
+            {group.transactions.map((tx) => (
+              <TransactionRow key={tx.id} transaction={tx} />
+            ))}
+          </View>
         ))}
 
         {transactions.length === 0 && !loading && (

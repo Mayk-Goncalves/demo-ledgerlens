@@ -5,14 +5,12 @@ import { Pressable, Text, View, type LayoutChangeEvent } from "react-native";
 import { formatCents } from "@/lib/format";
 
 interface BalanceCardProps {
-  /** Net balance in cents (income − expenses − credit card). */
+  /** Net balance in cents (income − expenses). */
   readonly balanceCents: number;
   /** Total income in cents for the month. */
   readonly incomeCents: number;
   /** Total expenses in cents for the month. */
   readonly expensesCents: number;
-  /** Total credit card charges in cents for the month. */
-  readonly creditCardCents: number;
   /** Called once the card measures itself, with the bleed offset in px. */
   readonly onBleedMeasured?: (bleed: number) => void;
 }
@@ -50,7 +48,6 @@ export function BalanceCard({
   balanceCents,
   incomeCents,
   expensesCents,
-  creditCardCents,
   onBleedMeasured,
 }: BalanceCardProps) {
   const [visible, setVisible] = useState(true);
@@ -102,12 +99,6 @@ export function BalanceCard({
         <SummaryItem
           label="Expenses"
           cents={expensesCents}
-          visible={visible}
-          color="text-white"
-        />
-        <SummaryItem
-          label="Credit Card"
-          cents={creditCardCents}
           visible={visible}
           color="text-white"
         />

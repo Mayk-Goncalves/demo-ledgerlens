@@ -23,6 +23,7 @@ const TRANSACTIONS_TABLE = `
     category    TEXT NOT NULL,
     note        TEXT,
     receipt_uri TEXT,
+    place_name  TEXT,
     latitude    REAL,
     longitude   REAL,
     created_at  INTEGER NOT NULL

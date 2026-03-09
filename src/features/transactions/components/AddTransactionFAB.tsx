@@ -10,10 +10,23 @@ const ACTIONS: readonly {
   type: TransactionType;
   label: string;
   icon: IconName;
+  bg: string;
+  bgActive: string;
 }[] = [
-  { type: "credit_card", label: "Credit Card", icon: "credit-card-outline" },
-  { type: "expense", label: "Expense", icon: "arrow-up-circle-outline" },
-  { type: "income", label: "Income", icon: "arrow-down-circle-outline" },
+  {
+    type: "expense",
+    label: "Expense",
+    icon: "arrow-up-circle-outline",
+    bg: "bg-rose-600",
+    bgActive: "active:bg-rose-700",
+  },
+  {
+    type: "income",
+    label: "Income",
+    icon: "arrow-down-circle-outline",
+    bg: "bg-emerald-600",
+    bgActive: "active:bg-emerald-700",
+  },
 ];
 
 const ANIMATION_DURATION = 200;
@@ -126,7 +139,7 @@ export function AddTransactionFAB({ onSelect }: AddTransactionFABProps) {
               <Pressable
                 onPress={() => handleSelect(action.type)}
                 style={{ width: ACTION_SIZE, height: ACTION_SIZE }}
-                className="items-center justify-center rounded-full bg-emerald-600 shadow-lg active:bg-emerald-700"
+                className={`items-center justify-center rounded-full ${action.bg} shadow-lg ${action.bgActive}`}
               >
                 <MaterialCommunityIcons
                   name={action.icon}

@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Alert, Modal, Pressable, Text, View } from "react-native";
 
 import { resetDatabase } from "@/lib/database";
+import { seedMonth } from "@/lib/seed";
 import { useFinanceStore } from "@/stores/finance";
 
 interface AccountModalProps {
@@ -11,6 +12,14 @@ interface AccountModalProps {
 
 export function AccountModal({ visible, onClose }: AccountModalProps) {
   const reload = useFinanceStore((s) => s.reload);
+  const year = useFinanceStore((s) => s.year);
+  const month = useFinanceStore((s) => s.month);
+
+  async function handleSeedMonth() {
+    const count = await seedMonth(year, month);
+    await reload();
+    Alert.alert("Done", `Added ${count} sample transactions.`);
+  }
 
   function handleClearDatabase() {
     Alert.alert(
@@ -38,7 +47,7 @@ export function AccountModal({ visible, onClose }: AccountModalProps) {
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <View className="flex-1 bg-white px-6 pt-4">
+      <View className="flex-1 px-6 pt-4 bg-white">
         {/* Header */}
         <View className="flex-row items-center justify-between pb-4 border-b border-gray-200">
           <Text className="text-lg font-semibold text-gray-900">Account</Text>
@@ -48,8 +57,8 @@ export function AccountModal({ visible, onClose }: AccountModalProps) {
         </View>
 
         {/* Profile */}
-        <View className="items-center py-8 gap-3">
-          <View className="h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
+        <View className="items-center gap-3 py-8">
+          <View className="items-center justify-center w-20 h-20 rounded-full bg-emerald-100">
             <MaterialCommunityIcons
               name="account-circle-outline"
               size={48}
@@ -61,9 +70,24 @@ export function AccountModal({ visible, onClose }: AccountModalProps) {
 
         {/* Actions */}
         <View className="gap-3">
+          {/* Seed Month */}
+          <Pressable
+            className="flex-row items-center gap-3 px-4 py-3 rounded-xl bg-emerald-50"
+            onPress={handleSeedMonth}
+          >
+            <MaterialCommunityIcons
+              name="database-plus-outline"
+              size={22}
+              color="#059669"
+            />
+            <Text className="text-base font-medium text-emerald-700">
+              Seed Current Month
+            </Text>
+          </Pressable>
+
           {/* Clear Database */}
           <Pressable
-            className="flex-row items-center gap-3 rounded-xl bg-red-50 px-4 py-3"
+            className="flex-row items-center gap-3 px-4 py-3 rounded-xl bg-red-50"
             onPress={handleClearDatabase}
           >
             <MaterialCommunityIcons
@@ -77,7 +101,7 @@ export function AccountModal({ visible, onClose }: AccountModalProps) {
           </Pressable>
 
           {/* Log Out — disabled */}
-          <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 px-4 py-3 opacity-40">
+          <View className="flex-row items-center gap-3 px-4 py-3 bg-gray-100 rounded-xl opacity-40">
             <MaterialCommunityIcons name="logout" size={22} color="#6b7280" />
             <Text className="text-base font-medium text-gray-500">Log Out</Text>
           </View>

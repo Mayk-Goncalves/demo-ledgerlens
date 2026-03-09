@@ -1,4 +1,7 @@
-/** Format integer cents as a dollar display string (e.g. 1250 → "$12.50"). */
+/** Format integer cents as a currency display string (e.g. 123456 → "$1,234.56"). */
 export function formatCents(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`;
+  return (cents / 100).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
 }

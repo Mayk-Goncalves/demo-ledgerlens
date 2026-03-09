@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AccountModal } from "@/components/ui/AccountModal";
 import { NotificationsModal } from "@/components/ui/NotificationsModal";
+import { useNotificationsStore } from "@/stores/notifications";
 
 interface HeaderProps {
   readonly children?: React.ReactNode;
@@ -17,6 +18,7 @@ export function Header({ children, bottomPadding = 0 }: HeaderProps) {
   const insets = useSafeAreaInsets();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
+  const unreadCount = useNotificationsStore((s) => s.unreadCount);
 
   return (
     <View
@@ -36,6 +38,13 @@ export function Header({ children, bottomPadding = 0 }: HeaderProps) {
               size={22}
               color="#ffffff"
             />
+            {unreadCount > 0 && (
+              <View className="absolute -top-1.5 -right-1.5 h-4 w-4 items-center justify-center rounded-full bg-rose-500">
+                <Text className="text-[10px] font-bold text-white">
+                  {unreadCount}
+                </Text>
+              </View>
+            )}
           </Pressable>
           <Pressable onPress={() => setShowAccount(true)} hitSlop={8}>
             <View className="items-center justify-center rounded-full h-9 w-9 bg-white/20">

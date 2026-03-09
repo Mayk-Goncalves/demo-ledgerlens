@@ -16,8 +16,7 @@ import type { Transaction } from "@/types/transaction";
 interface MonthlySummary {
   readonly income: number; // total income cents
   readonly expenses: number; // total expense cents
-  readonly creditCard: number; // total credit card cents
-  readonly balance: number; // income - expenses - creditCard
+  readonly balance: number; // income - expenses
 }
 
 interface FinanceState {
@@ -41,7 +40,6 @@ interface FinanceState {
 function computeSummary(transactions: readonly Transaction[]): MonthlySummary {
   let income = 0;
   let expenses = 0;
-  let creditCard = 0;
 
   for (const tx of transactions) {
     switch (tx.type) {
@@ -51,17 +49,13 @@ function computeSummary(transactions: readonly Transaction[]): MonthlySummary {
       case "expense":
         expenses += tx.amount;
         break;
-      case "credit_card":
-        creditCard += tx.amount;
-        break;
     }
   }
 
   return {
     income,
     expenses,
-    creditCard,
-    balance: income - expenses - creditCard,
+    balance: income - expenses,
   };
 }
 
@@ -71,7 +65,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   year: now.getFullYear(),
   month: now.getMonth() + 1, // 1-indexed
   transactions: [],
-  summary: { income: 0, expenses: 0, creditCard: 0, balance: 0 },
+  summary: { income: 0, expenses: 0, balance: 0 },
   loading: false,
 
   async setMonth(year, month) {

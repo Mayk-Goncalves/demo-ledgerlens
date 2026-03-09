@@ -1,9 +1,11 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { memo } from "react";
-import { Text, View } from "react-native";
+import { memo, useCallback, useState } from "react";
+import { Modal, Pressable, Text, View } from "react-native";
 
 import { formatCents } from "@/lib/format";
 import type { Transaction } from "@/types/transaction";
+
+import { ReceiptImageModal } from "./ReceiptImageModal";
 
 type IconName = React.ComponentProps<typeof MaterialCommunityIcons>["name"];
 
@@ -28,7 +30,6 @@ const DEFAULT_ICON: IconName = "swap-horizontal";
 const SIGN: Record<string, string> = {
   income: "+",
   expense: "-",
-  credit_card: "-",
 };
 
 interface TransactionRowProps {
@@ -42,6 +43,10 @@ export const TransactionRow = memo(function TransactionRow({
   const icon = CATEGORY_ICONS[transaction.category] ?? DEFAULT_ICON;
   const sign = SIGN[transaction.type] ?? "";
   const isIncome = transaction.type === "income";
+  const [showReceipt, setShowReceipt] = useState(false);
+
+  const handleReceiptPress = useCallback(() => setShowReceipt(true), []);
+  const handleReceiptClose = useCallback(() => setShowReceipt(false), []);
 
   return (
     <View className="mb-2.5 flex-row items-center rounded-xl bg-white p-4 shadow-sm">
@@ -58,6 +63,19 @@ export const TransactionRow = memo(function TransactionRow({
           </Text>
         ) : null}
       </View>
+      {transaction.receiptUri ? (
+        <Pressable
+          onPress={handleReceiptPress}
+          hitSlop={10}
+          className="items-center justify-center w-9 h-9 mr-3 rounded-lg border border-dashed border-gray-300 bg-gray-50"
+        >
+          <MaterialCommunityIcons
+            name="camera-outline"
+            size={18}
+            color="#6b7280"
+          />
+        </Pressable>
+      ) : null}
       <View className="items-end">
         <Text
           className={`text-sm font-semibold ${isIncome ? "text-emerald-600" : "text-gray-900"}`}
@@ -66,9 +84,20 @@ export const TransactionRow = memo(function TransactionRow({
           {formatCents(transaction.amount)}
         </Text>
         <Text className="mt-0.5 text-xs text-gray-300">
-          {new Date(transaction.createdAt).toLocaleDateString()}
+          {new Date(transaction.createdAt).toLocaleTimeString(undefined, {
+            hour: "numeric",
+            minute: "2-digit",
+          })}
         </Text>
       </View>
+
+      {transaction.receiptUri ? (
+        <ReceiptImageModal
+          visible={showReceipt}
+          uri={transaction.receiptUri}
+          onClose={handleReceiptClose}
+        />
+      ) : null}
     </View>
   );
 });

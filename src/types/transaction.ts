@@ -12,7 +12,7 @@
  */
 
 /** The kind of transaction. Determines how it affects the monthly balance. */
-export const TRANSACTION_TYPES = ["income", "expense", "credit_card"] as const;
+export const TRANSACTION_TYPES = ["income", "expense"] as const;
 
 export type TransactionType = (typeof TRANSACTION_TYPES)[number];
 
@@ -38,11 +38,14 @@ export const DEFAULT_CURRENCY = "USD";
 
 /**
  * Location data attached to a transaction.
- * Extensible — could later include placeName, address, or placeId.
+ * placeName supports manual entry (e.g. "Costco") and future
+ * Places API integration. Coordinates are optional — a user
+ * can type a store name without capturing GPS.
  */
 export interface TransactionLocation {
-  readonly latitude: number;
-  readonly longitude: number;
+  readonly placeName?: string;
+  readonly latitude?: number;
+  readonly longitude?: number;
 }
 
 /** A persisted transaction record. */
@@ -58,7 +61,7 @@ export interface Transaction {
   readonly createdAt: number; // Unix timestamp in ms
 }
 
-/** Input for creating a new transaction. id and createdAt are generated automatically. */
+/** Input for creating a new transaction. id is generated automatically. */
 export interface CreateTransactionInput {
   readonly type: TransactionType;
   readonly amount: number; // positive integer cents
@@ -67,6 +70,7 @@ export interface CreateTransactionInput {
   readonly note?: string;
   readonly receiptUri?: string;
   readonly location?: TransactionLocation;
+  readonly createdAt?: number; // Unix timestamp in ms; defaults to Date.now()
 }
 
 /** Raw row shape returned from SQLite. Snake_case matches DB columns. */
@@ -78,6 +82,7 @@ export interface TransactionRow {
   readonly category: string;
   readonly note: string | null;
   readonly receipt_uri: string | null;
+  readonly place_name: string | null;
   readonly latitude: number | null;
   readonly longitude: number | null;
   readonly created_at: number; // Unix timestamp in ms
