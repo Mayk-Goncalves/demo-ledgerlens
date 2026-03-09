@@ -25,7 +25,7 @@ Demonstrate senior-level React Native + Expo capabilities including:
 | Styling        | NativeWind v4 + Tailwind CSS 3.4  |
 | State          | Zustand _(when needed)_           |
 | Lists          | FlashList _(when needed)_         |
-| Camera         | expo-camera _(when needed)_       |
+| Camera         | expo-image-picker                 |
 | Location       | expo-location _(when needed)_     |
 | Images         | expo-image                        |
 | Storage        | expo-sqlite _(when needed)_       |
@@ -50,18 +50,25 @@ yarn start:tunnel
 
 ```
 ├── .github/
-│   └── copilot-instructions.md   # AI pair-programming guidelines
+│   └── copilot-instructions.md      # AI pair-programming guidelines
 ├── src/
-│   ├── app/                      # Expo Router (file-based routing)
-│   ├── assets/                   # Images, fonts, icons
-│   ├── components/               # Reusable UI components
-│   ├── constants/                # Theme, config values
-│   └── hooks/                    # Custom React hooks
-├── app.json                      # Expo config
-├── babel.config.js               # Babel + NativeWind preset
-├── metro.config.js               # Metro + NativeWind
-├── tailwind.config.js            # Tailwind CSS config
-└── tsconfig.json                 # TypeScript strict config
+│   ├── app/                         # Expo Router (file-based routing)
+│   ├── assets/images/               # Icons, splash, branding
+│   ├── components/ui/               # Reusable UI primitives
+│   ├── constants/                   # Categories, config values
+│   ├── features/transactions/       # Transaction feature
+│   │   ├── components/              # Feature-specific UI
+│   │   ├── modals/                  # Form modal entry points
+│   │   └── storage.ts              # SQLite CRUD
+│   ├── lib/                         # Infrastructure (database, format, seed)
+│   ├── stores/                      # Zustand stores
+│   ├── types/                       # Domain types
+│   └── utils/                       # Pure utility functions
+├── app.json                         # Expo config
+├── babel.config.js                  # Babel + NativeWind preset
+├── metro.config.js                  # Metro + NativeWind
+├── tailwind.config.js               # Tailwind CSS config
+└── tsconfig.json                    # TypeScript strict config
 ```
 
 ---
@@ -70,7 +77,9 @@ yarn start:tunnel
 
 ### Phase 1 — Foundation ✅
 
-> Project scaffolding, tooling, and base configuration.
+#### Step 1 — Project Scaffolding ✅
+
+> Tooling, configuration, and base setup.
 
 - [x] Initialize Expo project (SDK 54, New Architecture)
 - [x] Configure Yarn 4 with `node_modules` linker
@@ -81,39 +90,43 @@ yarn start:tunnel
 - [x] Create landing screen with LedgerLens branding
 - [x] Set up Copilot instructions for AI-assisted development
 
-### Phase 2 — Data Layer & Core Types 🔲
+#### Step 2 — Data Layer & Core Types ✅
 
-> Define the domain model, local storage, and state management.
+> Domain model, local storage, and type foundation.
 
-- [ ] Define core TypeScript types (Transaction, Receipt, Category, Location)
-- [ ] Set up expo-sqlite for local persistence
-- [ ] Create Zustand store for transaction state
-- [ ] Implement database service layer (CRUD operations)
-- [ ] Add seed data for development
+- [x] Define core TypeScript types (Transaction, CreateTransactionInput, TransactionLocation)
+- [x] Amount as integer cents with currency (ISO 4217) for i18n readiness
+- [x] Grouped location type (extensible for future place data)
+- [x] Set up expo-sqlite for local persistence
+- [x] Implement storage layer (insert, getByMonth, delete)
+- [x] Create Zustand store for transaction state (finance + notifications)
+- [x] Preload icon fonts during splash screen
 
-### Phase 3 — Add Expense Flow 🔲
+### Phase 2 — Add Transaction Flow ✅
 
-> Vertical slice of the primary feature.
+> Vertical slice of the primary feature — income & expense entry.
 
-- [ ] Create Add Expense form screen
-- [ ] Implement category picker
-- [ ] Integrate expo-camera for receipt capture
-- [ ] Integrate expo-location for auto location
-- [ ] Implement local image storage (expo-file-system)
-- [ ] Wire form to Zustand store + SQLite
+- [x] Create Add Income / Add Expense form modals (shared receipt-style TransactionFormModal)
+- [x] Implement category picker (3 income + 9 expense categories with icons)
+- [x] Integrate expo-image-picker for receipt capture (camera + gallery)
+- [x] Integrate expo-location for auto-location capture (GPS + place name)
+- [x] Persist receipt images to app storage (expo-file-system)
+- [x] Wire form to Zustand store + SQLite
+- [x] Dev seed utility for sample data generation
 
-### Phase 4 — Transactions Feed 🔲
+### Phase 3 — Transactions Feed ✅
 
 > High-performance scrollable list with receipt previews.
 
-- [ ] Implement transaction list screen
-- [ ] Integrate FlashList for performance
-- [ ] Benchmark FlatList vs FlashList (document results)
-- [ ] Add receipt thumbnail previews (expo-image)
-- [ ] Target 60 FPS scroll performance
-- [ ] Implement pull-to-refresh and empty states
+- [x] Implement transaction list screen (grouped by day with section headers)
+- [x] Memoized transaction rows
+- [x] Empty state UI
+- [x] Add receipt indicator with full-image modal in transaction rows (expo-image)
+- [x] Implement pull-to-refresh
 
-### Phase 5 — Analytics Screen 🔲
+> **Note:** FlashList migration, FlatList vs FlashList benchmarking, and 60 FPS profiling moved to Phase 6. The current dataset (tens to low hundreds of transactions per month) doesn't stress ScrollView — profiling should happen alongside bundle analysis with a large seeded dataset to produce meaningful before/after metrics.
+
+### Phase 4 — Analytics Screen 🔲
 
 > Lightweight data visualization.
 
@@ -122,7 +135,7 @@ yarn start:tunnel
 - [ ] Lightweight chart implementation (minimal library)
 - [ ] Date range filtering
 
-### Phase 6 — Tab Navigation & Polish 🔲
+### Phase 5 — Tab Navigation & Polish 🔲
 
 > Wire screens together with proper navigation.
 
@@ -131,16 +144,19 @@ yarn start:tunnel
 - [ ] Implement dark mode support
 - [ ] Polish UI details and edge cases
 
-### Phase 7 — Performance & Bundle Optimization 🔲
+### Phase 6 — Performance & Bundle Optimization 🔲
 
 > Measure, analyze, and optimize.
 
 - [ ] Run Expo Atlas for bundle analysis
 - [ ] Identify and remove heavy dependencies
 - [ ] Implement dynamic imports where beneficial
+- [ ] Integrate FlashList for virtualized list performance
+- [ ] Benchmark ScrollView vs FlashList with 1,000+ seeded transactions
+- [ ] Target and verify 60 FPS scroll performance (profile and document)
 - [ ] Document performance benchmarks
 
-### Phase 8 — CI/CD & Deployment 🔲
+### Phase 7 — CI/CD & Deployment 🔲
 
 > Production-grade build and delivery pipeline.
 
