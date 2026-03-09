@@ -260,6 +260,7 @@ Working part-time over ~1 month.
 
 ## Code Quality Expectations
 
+- **One component per file** — do not define multiple React components in a single file; extract each into its own file under the appropriate directory
 - Reusable components
 - Clear naming
 - No magic numbers — extract constants
