@@ -127,14 +127,17 @@ yarn start:tunnel
 
 > **Note:** FlashList migration, FlatList vs FlashList benchmarking, and 60 FPS profiling moved to Phase 6. The current dataset (tens to low hundreds of transactions per month) doesn't stress ScrollView — profiling should happen alongside bundle analysis with a large seeded dataset to produce meaningful before/after metrics.
 
-### Phase 4 — Analytics Screen 🔲
+### Phase 4 — Analytics Screen ✅
 
-> Lightweight data visualization.
+> Lightweight data visualization — no chart libraries, pure View-based rendering.
 
-- [ ] Monthly spending summary
-- [ ] Category breakdown view
-- [ ] Lightweight chart implementation (minimal library)
-- [ ] Date range filtering
+- [x] Monthly spending summary (category breakdown with horizontal bar chart + percentages)
+- [x] Category breakdown view (color-coded bars, icons, sorted by spend)
+- [x] Income vs Expenses stacked bar with net balance
+- [x] Monthly insights (daily average, top spending day, transaction counts)
+- [x] Navigate to analytics from BalanceCard chart icon
+
+> **Note:** Date range filtering beyond month navigation is not needed — the MonthPicker on the home screen already scopes all data by month, and the analytics screen reads from the same store.
 
 ### Phase 5 — Tab Navigation & Polish 🔲
 
