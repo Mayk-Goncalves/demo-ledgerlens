@@ -149,7 +149,7 @@ yarn start:tunnel
 - [x] Remove push-based analytics navigation (now a tab)
 - [x] Polish MonthPicker text size and transactions padding
 - [x] Add screen transitions (fade on stack + tabs)
-- [ ] Implement dark mode support
+- [x] Implement dark mode support (NativeWind useColorScheme, light/dark/system toggle in Settings)
 
 ### Phase 6 — Performance & Bundle Optimization 🔲
 
