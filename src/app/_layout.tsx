@@ -4,10 +4,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { colorScheme } from "nativewind";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 SplashScreen.preventAutoHideAsync();
+colorScheme.set("light");
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
