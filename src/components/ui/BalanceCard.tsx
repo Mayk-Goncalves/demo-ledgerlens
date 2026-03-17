@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { Pressable, Text, View, type LayoutChangeEvent } from "react-native";
 
@@ -52,6 +53,7 @@ export function BalanceCard({
 }: BalanceCardProps) {
   const [visible, setVisible] = useState(true);
   const [cardHeight, setCardHeight] = useState(0);
+  const router = useRouter();
 
   const bleed = cardHeight ? cardHeight / 2 + PARENT_PADDING_TOP : 0;
 
@@ -73,16 +75,30 @@ export function BalanceCard({
       {/* Balance header */}
       <View className="flex-row items-center justify-between">
         <Text className="text-sm text-emerald-200">Balance</Text>
-        <Pressable
-          onPress={() => setVisible((v) => !v)}
-          className="active:opacity-70"
-        >
-          <MaterialCommunityIcons
-            name={visible ? "eye-outline" : "eye-off-outline"}
-            size={18}
-            color="#6ee7b7"
-          />
-        </Pressable>
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={() => setVisible((v) => !v)}
+            className="items-center justify-center w-8 h-8 rounded-full bg-emerald-500/30 active:bg-emerald-500/50"
+            hitSlop={6}
+          >
+            <MaterialCommunityIcons
+              name={visible ? "eye-outline" : "eye-off-outline"}
+              size={16}
+              color="#a7f3d0"
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => router.push("/analytics")}
+            className="items-center justify-center w-8 h-8 rounded-full bg-emerald-500/30 active:bg-emerald-500/50"
+            hitSlop={6}
+          >
+            <MaterialCommunityIcons
+              name="chart-bar"
+              size={16}
+              color="#a7f3d0"
+            />
+          </Pressable>
+        </View>
       </View>
       <Text className="mt-1 text-4xl font-bold text-white">
         {visible ? formatCents(balanceCents) : "••••••"}
