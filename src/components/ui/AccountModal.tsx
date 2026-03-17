@@ -21,6 +21,12 @@ export function AccountModal({ visible, onClose }: AccountModalProps) {
     Alert.alert("Done", `Added ${count} sample transactions.`);
   }
 
+  async function handleStressTest() {
+    const count = await seedMonth(year, month, 10);
+    await reload();
+    Alert.alert("Stress Test", `Added ${count} transactions for profiling.`);
+  }
+
   function handleClearDatabase() {
     Alert.alert(
       "Clear Database",
@@ -82,6 +88,21 @@ export function AccountModal({ visible, onClose }: AccountModalProps) {
             />
             <Text className="text-base font-medium text-emerald-700">
               Seed Current Month
+            </Text>
+          </Pressable>
+
+          {/* Stress Test (scale=10) */}
+          <Pressable
+            className="flex-row items-center gap-3 px-4 py-3 rounded-xl bg-amber-50"
+            onPress={handleStressTest}
+          >
+            <MaterialCommunityIcons
+              name="speedometer"
+              size={22}
+              color="#d97706"
+            />
+            <Text className="text-base font-medium text-amber-700">
+              Stress Test (×10)
             </Text>
           </Pressable>
 
