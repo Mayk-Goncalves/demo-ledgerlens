@@ -1,9 +1,14 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useMemo } from "react";
-import { RefreshControl, ScrollView, Text, View } from "react-native";
+import { FlashList } from "@shopify/flash-list";
+import { useCallback, useMemo } from "react";
+import { Text, View } from "react-native";
 
 import type { Transaction } from "@/types/transaction";
-import { groupByDay } from "@/utils/transactions";
+import {
+  flattenForList,
+  groupByDay,
+  type ListItem,
+} from "@/utils/transactions";
 
 import { TransactionRow } from "./TransactionRow";
 
@@ -13,73 +18,90 @@ interface TransactionListProps {
   readonly onRefresh: () => void;
 }
 
-/** Scrollable feed of recent transactions grouped by day. */
+function ListHeader({ count }: { readonly count: number }) {
+  return (
+    <View className="flex-row items-center justify-between">
+      <Text className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+        Recent Transactions
+      </Text>
+      <Text className="text-sm text-emerald-600">{count} total</Text>
+    </View>
+  );
+}
+
+function SectionHeader({ label }: { readonly label: string }) {
+  return (
+    <View className="pt-2 pb-2 bg-gray-50 dark:bg-gray-900">
+      <Text className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
+        {label}
+      </Text>
+    </View>
+  );
+}
+
+function EmptyState() {
+  return (
+    <View className="items-center py-12">
+      <MaterialCommunityIcons name="inbox-outline" size={48} color="#9ca3af" />
+      <Text className="mt-3 text-sm text-gray-400">
+        No transactions yet. Tap Add above.
+      </Text>
+    </View>
+  );
+}
+
+/** Scrollable feed of recent transactions grouped by day (FlashList). */
 export function TransactionList({
   transactions,
   loading,
   onRefresh,
 }: TransactionListProps) {
   const groups = useMemo(() => groupByDay(transactions), [transactions]);
+  const data = useMemo(() => flattenForList(groups), [groups]);
 
-  const refreshControl = useMemo(
-    () => (
-      <RefreshControl
-        refreshing={loading}
-        onRefresh={onRefresh}
-        tintColor="#059669"
-        colors={["#059669"]}
-      />
-    ),
-    [loading, onRefresh],
+  const renderItem = useCallback(({ item }: { item: ListItem }) => {
+    if (item.type === "header") {
+      return <SectionHeader label={item.label} />;
+    }
+    return <TransactionRow transaction={item.transaction} />;
+  }, []);
+
+  const getItemType = useCallback(
+    (item: ListItem) => item.type,
+    [],
   );
 
   return (
     <View className="flex-1 mt-6 px-2">
-      <View className="flex-row items-center justify-between">
-        <Text className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-          Recent Transactions
-        </Text>
-        <Text className="text-sm text-emerald-600">
-          {transactions.length} total
-        </Text>
-      </View>
+      <ListHeader count={transactions.length} />
 
-      <ScrollView
-        className="flex-1 mt-3"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 96 }}
-        refreshControl={refreshControl}
-      >
-        {groups.map((group) => (
-          <View key={group.label} className="mb-2">
-            <Text className="mb-2 text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
-              {group.label}
-            </Text>
-            {group.transactions.map((tx) => (
-              <TransactionRow key={tx.id} transaction={tx} />
-            ))}
-          </View>
-        ))}
+      {transactions.length === 0 && !loading ? (
+        <EmptyState />
+      ) : (
+        <FlashList
+          data={data}
+          renderItem={renderItem}
+          getItemType={getItemType}
+          contentContainerStyle={{ paddingBottom: 96 }}
+          showsVerticalScrollIndicator={false}
+          refreshing={loading}
+          onRefresh={onRefresh}
+          keyExtractor={keyExtractor}
+        />
+      )}
 
-        {transactions.length === 0 && !loading && (
-          <View className="items-center py-12">
-            <MaterialCommunityIcons
-              name="inbox-outline"
-              size={48}
-              color="#9ca3af"
-            />
-            <Text className="mt-3 text-sm text-gray-400">
-              No transactions yet. Tap Add above.
-            </Text>
-          </View>
-        )}
-
-        {loading && (
-          <View className="items-center py-12">
-            <Text className="text-sm text-gray-400">Loading…</Text>
-          </View>
-        )}
-      </ScrollView>
+      {loading && transactions.length === 0 && (
+        <View className="items-center py-12">
+          <Text className="text-sm text-gray-400">Loading…</Text>
+        </View>
+      )}
     </View>
   );
+}
+
+function keyExtractor(item: ListItem, index: number): string {
+  if (item.type === "header") {
+    return `header-${item.label}`;
+  }
+  return item.transaction.id;
 }

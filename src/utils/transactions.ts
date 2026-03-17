@@ -7,6 +7,40 @@ export interface DayGroup {
   readonly transactions: readonly Transaction[];
 }
 
+// ── Flat list items for FlashList ──────────────────────────────────
+
+export interface ListHeaderItem {
+  readonly type: "header";
+  readonly label: string;
+}
+
+export interface ListTransactionItem {
+  readonly type: "transaction";
+  readonly transaction: Transaction;
+}
+
+export type ListItem = ListHeaderItem | ListTransactionItem;
+
+/**
+ * Flatten day-grouped transactions into a single array with interleaved
+ * header items. Designed for FlashList — enables view recycling via
+ * `getItemType` and supports `stickyHeaderIndices`.
+ */
+export function flattenForList(groups: readonly DayGroup[]): readonly ListItem[] {
+  const items: ListItem[] = [];
+
+  for (const group of groups) {
+    items.push({ type: "header", label: group.label });
+    for (const tx of group.transactions) {
+      items.push({ type: "transaction", transaction: tx });
+    }
+  }
+
+  return items;
+}
+
+
+
 /** Group transactions by calendar day, sorted most-recent-first. */
 export function groupByDay(
   transactions: readonly Transaction[],
