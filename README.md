@@ -153,15 +153,15 @@ yarn start:tunnel
 
 ### Phase 6 — Performance & Bundle Optimization 🔲
 
-> Measure, analyze, and optimize.
+> Measure, analyze, and optimize. See [docs/performance.md](docs/performance.md) for detailed metrics and rationale.
 
-- [ ] Run Expo Atlas for bundle analysis
-- [ ] Identify and remove heavy dependencies
+- [x] Run Expo Atlas for bundle analysis
+- [x] Identify and remove heavy dependencies
 - [ ] Implement dynamic imports where beneficial
-- [ ] Integrate FlashList for virtualized list performance
-- [ ] Benchmark ScrollView vs FlashList with 1,000+ seeded transactions
-- [ ] Target and verify 60 FPS scroll performance (profile and document)
-- [ ] Document performance benchmarks
+- [x] Integrate FlashList for virtualized list performance
+- [x] Benchmark ScrollView vs FlashList with 1,000+ seeded transactions
+- [x] Target and verify 60 FPS scroll performance (profile and document)
+- [x] Document performance benchmarks
 
 ### Phase 7 — CI/CD & Deployment 🔲
 

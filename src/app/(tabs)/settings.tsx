@@ -1,32 +1,43 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { useCallback, useState } from "react";
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { ListBenchmark } from "@/features/transactions/components/ListBenchmark";
 import { resetDatabase } from "@/lib/database";
 import { seedMonth } from "@/lib/seed";
 import { useFinanceStore } from "@/stores/finance";
+
+type BusyAction = "seed" | "stress" | "clear" | null;
 
 export default function SettingsTab() {
   const insets = useSafeAreaInsets();
   const reload = useFinanceStore((s) => s.reload);
   const year = useFinanceStore((s) => s.year);
   const month = useFinanceStore((s) => s.month);
+  const transactions = useFinanceStore((s) => s.transactions);
   const { colorScheme, toggleColorScheme } = useColorScheme();
+  const [showBenchmark, setShowBenchmark] = useState(false);
+  const [busy, setBusy] = useState<BusyAction>(null);
 
-  async function handleSeedMonth() {
+  const handleSeedMonth = useCallback(async () => {
+    setBusy("seed");
     const count = await seedMonth(year, month);
     await reload();
+    setBusy(null);
     Alert.alert("Done", `Added ${count} sample transactions.`);
-  }
+  }, [year, month, reload]);
 
-  async function handleStressTest() {
+  const handleStressTest = useCallback(async () => {
+    setBusy("stress");
     const count = await seedMonth(year, month, 10);
     await reload();
+    setBusy(null);
     Alert.alert("Stress Test", `Added ${count} transactions for profiling.`);
-  }
+  }, [year, month, reload]);
 
-  function handleClearDatabase() {
+  const handleClearDatabase = useCallback(() => {
     Alert.alert(
       "Clear Database",
       "This will delete all transactions. This action cannot be undone.",
@@ -36,13 +47,15 @@ export default function SettingsTab() {
           text: "Clear",
           style: "destructive",
           onPress: async () => {
+            setBusy("clear");
             await resetDatabase();
             await reload();
+            setBusy(null);
           },
         },
       ],
     );
-  }
+  }, [reload]);
 
   return (
     <View className="flex-1 bg-gray-900 dark:bg-gray-100">
@@ -108,42 +121,76 @@ export default function SettingsTab() {
             <Pressable
               className="flex-row items-center gap-3 px-4 py-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 active:bg-emerald-100 dark:active:bg-emerald-900/40"
               onPress={handleSeedMonth}
+              disabled={busy !== null}
+              style={busy && busy !== "seed" ? { opacity: 0.4 } : undefined}
             >
-              <MaterialCommunityIcons
-                name="database-plus-outline"
-                size={22}
-                color="#059669"
-              />
+              {busy === "seed" ? (
+                <ActivityIndicator size={22} color="#059669" />
+              ) : (
+                <MaterialCommunityIcons
+                  name="database-plus-outline"
+                  size={22}
+                  color="#059669"
+                />
+              )}
               <Text className="text-base font-medium text-emerald-700 dark:text-emerald-400">
-                Seed Current Month
+                {busy === "seed" ? "Seeding…" : "Seed Current Month"}
               </Text>
             </Pressable>
 
             <Pressable
               className="flex-row items-center gap-3 px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 active:bg-amber-100 dark:active:bg-amber-900/40"
               onPress={handleStressTest}
+              disabled={busy !== null}
+              style={busy && busy !== "stress" ? { opacity: 0.4 } : undefined}
+            >
+              {busy === "stress" ? (
+                <ActivityIndicator size={22} color="#d97706" />
+              ) : (
+                <MaterialCommunityIcons
+                  name="speedometer"
+                  size={22}
+                  color="#d97706"
+                />
+              )}
+              <Text className="text-base font-medium text-amber-700 dark:text-amber-400">
+                {busy === "stress" ? "Seeding…" : "Stress Test (×10)"}
+              </Text>
+            </Pressable>
+
+            <Pressable
+              className="flex-row items-center gap-3 px-4 py-3 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 active:bg-indigo-100 dark:active:bg-indigo-900/40"
+              onPress={() => setShowBenchmark(true)}
+              disabled={busy !== null}
+              style={busy ? { opacity: 0.4 } : undefined}
             >
               <MaterialCommunityIcons
-                name="speedometer"
+                name="chart-timeline-variant-shimmer"
                 size={22}
-                color="#d97706"
+                color="#6366f1"
               />
-              <Text className="text-base font-medium text-amber-700 dark:text-amber-400">
-                Stress Test (×10)
+              <Text className="text-base font-medium text-indigo-700 dark:text-indigo-400">
+                List Benchmark
               </Text>
             </Pressable>
 
             <Pressable
               className="flex-row items-center gap-3 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 active:bg-red-100 dark:active:bg-red-900/40"
               onPress={handleClearDatabase}
+              disabled={busy !== null}
+              style={busy && busy !== "clear" ? { opacity: 0.4 } : undefined}
             >
-              <MaterialCommunityIcons
-                name="delete-outline"
-                size={22}
-                color="#dc2626"
-              />
+              {busy === "clear" ? (
+                <ActivityIndicator size={22} color="#dc2626" />
+              ) : (
+                <MaterialCommunityIcons
+                  name="delete-outline"
+                  size={22}
+                  color="#dc2626"
+                />
+              )}
               <Text className="text-base font-medium text-red-600 dark:text-red-400">
-                Clear Database
+                {busy === "clear" ? "Clearing…" : "Clear Database"}
               </Text>
             </Pressable>
           </View>
@@ -178,6 +225,16 @@ export default function SettingsTab() {
           </View>
         </ScrollView>
       </View>
+
+      <ListBenchmark
+        visible={showBenchmark}
+        onClose={() => setShowBenchmark(false)}
+        transactions={transactions}
+        onSeed={async () => {
+          await seedMonth(year, month, 10);
+          await reload();
+        }}
+      />
     </View>
   );
 }
