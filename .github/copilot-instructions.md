@@ -152,6 +152,18 @@ Think about:
 - Assume PM must receive update without rebuild
 - Do not suggest paid CI services
 
+### 8. Commit Conventions
+
+Follow the **Conventional Commits** standard.
+
+- Use prefixes: `feat`, `fix`, `refactor`, `chore`, `style`, `docs`, `test`, `perf`, `ci`, `build`
+- Include a scope when it clarifies context: `feat(transactions): add pull-to-refresh`
+- Keep the subject line short and imperative: _"add receipt modal"_, not _"added receipt modal"_
+- Add a body description **only** when the subject alone isn't enough to explain _why_
+- Group related changes into **separate, focused commits** — one concern per commit
+  - e.g. a new component, its wiring into the screen, and a README update = 3 commits
+- Do **not** squash unrelated changes into a single commit
+
 ---
 
 ## Core Features
