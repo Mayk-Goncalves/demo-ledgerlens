@@ -89,6 +89,7 @@ yarn start:tunnel
 - [x] Set up NativeWind v4 + Tailwind CSS
 - [x] Create landing screen with LedgerLens branding
 - [x] Set up Copilot instructions for AI-assisted development
+- [x] Clean `expo prebuild` execution with zero manual native edits (config plugins for camera, photos, location permissions)
 
 #### Step 2 — Data Layer & Core Types ✅
 
