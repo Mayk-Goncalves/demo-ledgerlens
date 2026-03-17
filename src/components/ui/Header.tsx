@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { AccountModal } from "@/components/ui/AccountModal";
 import { NotificationsModal } from "@/components/ui/NotificationsModal";
 import { useNotificationsStore } from "@/stores/notifications";
 
@@ -17,7 +16,6 @@ interface HeaderProps {
 export function Header({ children, bottomPadding = 0 }: HeaderProps) {
   const insets = useSafeAreaInsets();
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showAccount, setShowAccount] = useState(false);
   const unreadCount = useNotificationsStore((s) => s.unreadCount);
 
   return (
@@ -46,15 +44,6 @@ export function Header({ children, bottomPadding = 0 }: HeaderProps) {
               </View>
             )}
           </Pressable>
-          <Pressable onPress={() => setShowAccount(true)} hitSlop={8}>
-            <View className="items-center justify-center rounded-full h-9 w-9 bg-white/20">
-              <MaterialCommunityIcons
-                name="account-circle-outline"
-                size={20}
-                color="#ffffff"
-              />
-            </View>
-          </Pressable>
         </View>
       </View>
 
@@ -64,10 +53,7 @@ export function Header({ children, bottomPadding = 0 }: HeaderProps) {
         visible={showNotifications}
         onClose={() => setShowNotifications(false)}
       />
-      <AccountModal
-        visible={showAccount}
-        onClose={() => setShowAccount(false)}
-      />
+
     </View>
   );
 }

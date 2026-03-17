@@ -34,7 +34,7 @@ export function TransactionList({
   );
 
   return (
-    <View className="flex-1 mt-4">
+    <View className="flex-1 mt-6 px-2">
       <View className="flex-row items-center justify-between">
         <Text className="text-lg font-semibold text-gray-800">
           Recent Transactions

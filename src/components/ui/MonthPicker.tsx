@@ -55,7 +55,7 @@ export function MonthPicker({
         hitSlop={8}
         accessibilityLabel="Go to current month"
       >
-        <Text className="text-sm font-medium text-emerald-100 min-w-[120px] text-center">
+        <Text className="text-xl font-semibold text-emerald-100 min-w-[130px] text-center">
           {label}
         </Text>
       </Pressable>
