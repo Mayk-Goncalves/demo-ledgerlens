@@ -64,18 +64,18 @@ export function CategoryBar({
           >
             <MaterialCommunityIcons name={icon} size={14} color={color} />
           </View>
-          <Text className="text-sm font-medium text-gray-700 capitalize">
+          <Text className="text-sm font-medium text-gray-700 dark:text-gray-200 capitalize">
             {label}
           </Text>
           <Text className="text-xs text-gray-400">
             {Math.round(percentage)}%
           </Text>
         </View>
-        <Text className="text-sm font-semibold text-gray-800">
+        <Text className="text-sm font-semibold text-gray-800 dark:text-gray-100">
           {amountText}
         </Text>
       </View>
-      <View className="h-3 overflow-hidden rounded-full bg-gray-100">
+      <View className="h-3 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
         <View
           className="h-full rounded-full"
           style={{

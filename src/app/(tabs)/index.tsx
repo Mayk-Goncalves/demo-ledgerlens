@@ -116,7 +116,7 @@ export default function HomeTab() {
   }, []);
 
   return (
-    <View className="flex-1 bg-gray-900">
+    <View className="flex-1 bg-gray-900 dark:bg-gray-100">
       <Header bottomPadding={cardBleed}>
         <MonthPicker
           year={year}
@@ -127,7 +127,7 @@ export default function HomeTab() {
         />
       </Header>
 
-      <View className="flex-1 px-6 pt-6 pb-0 rounded-t-3xl bg-gray-50">
+      <View className="flex-1 px-6 pt-6 pb-0 rounded-t-3xl bg-gray-50 dark:bg-gray-900">
         <BalanceCard
           balanceCents={summary.balance}
           incomeCents={summary.income}

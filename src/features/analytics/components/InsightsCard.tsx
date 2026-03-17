@@ -28,17 +28,17 @@ function InsightRow({
         >
           <MaterialCommunityIcons name={icon} size={18} color={color} />
         </View>
-        <Text className="text-sm text-gray-600">{label}</Text>
+        <Text className="text-sm text-gray-600 dark:text-gray-400">{label}</Text>
       </View>
-      <Text className="text-sm font-semibold text-gray-800">{value}</Text>
+      <Text className="text-sm font-semibold text-gray-800 dark:text-gray-100">{value}</Text>
     </View>
   );
 }
 
 export function InsightsCard({ insights }: InsightsCardProps) {
   return (
-    <View className="rounded-2xl bg-white p-5 shadow-sm">
-      <Text className="mb-2 text-base font-semibold text-gray-800">
+    <View className="rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm">
+      <Text className="mb-2 text-base font-semibold text-gray-800 dark:text-gray-100">
         Insights
       </Text>
 

@@ -36,7 +36,7 @@ export function TransactionList({
   return (
     <View className="flex-1 mt-6 px-2">
       <View className="flex-row items-center justify-between">
-        <Text className="text-lg font-semibold text-gray-800">
+        <Text className="text-lg font-semibold text-gray-800 dark:text-gray-100">
           Recent Transactions
         </Text>
         <Text className="text-sm text-emerald-600">
@@ -52,7 +52,7 @@ export function TransactionList({
       >
         {groups.map((group) => (
           <View key={group.label} className="mb-2">
-            <Text className="mb-2 text-xs font-semibold tracking-widest text-gray-400 uppercase">
+            <Text className="mb-2 text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
               {group.label}
             </Text>
             {group.transactions.map((tx) => (

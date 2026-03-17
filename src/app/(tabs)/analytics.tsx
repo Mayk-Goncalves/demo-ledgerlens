@@ -35,7 +35,7 @@ export default function AnalyticsTab() {
   }, [setMonth]);
 
   return (
-    <View className="flex-1 bg-gray-900">
+    <View className="flex-1 bg-gray-900 dark:bg-gray-100">
       <Header bottomPadding={16}>
         <MonthPicker
           year={year}
@@ -46,7 +46,7 @@ export default function AnalyticsTab() {
         />
       </Header>
 
-      <View className="flex-1 p-6 rounded-t-3xl bg-gray-50">
+      <View className="flex-1 p-6 rounded-t-3xl bg-gray-50 dark:bg-gray-900">
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 40, gap: 16 }}

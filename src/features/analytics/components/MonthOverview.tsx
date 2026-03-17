@@ -18,13 +18,13 @@ export function MonthOverview({
   const incomeRatio = total > 0 ? incomeCents / total : 0.5;
 
   return (
-    <View className="rounded-2xl bg-white p-5 shadow-sm">
-      <Text className="mb-4 text-base font-semibold text-gray-800">
+    <View className="rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm">
+      <Text className="mb-4 text-base font-semibold text-gray-800 dark:text-gray-100">
         Income vs Expenses
       </Text>
 
       {/* Stacked bar */}
-      <View className="h-4 flex-row overflow-hidden rounded-full bg-gray-100">
+      <View className="h-4 flex-row overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
         <View
           className="h-full rounded-l-full"
           style={{
@@ -47,7 +47,7 @@ export function MonthOverview({
           <View className="w-3 h-3 rounded-full bg-emerald-500" />
           <View>
             <Text className="text-xs text-gray-400">Income</Text>
-            <Text className="text-sm font-semibold text-gray-800">
+            <Text className="text-sm font-semibold text-gray-800 dark:text-gray-100">
               {formatCents(incomeCents)}
             </Text>
           </View>
@@ -56,7 +56,7 @@ export function MonthOverview({
           <View className="w-3 h-3 rounded-full bg-rose-500" />
           <View>
             <Text className="text-xs text-gray-400">Expenses</Text>
-            <Text className="text-sm font-semibold text-gray-800">
+            <Text className="text-sm font-semibold text-gray-800 dark:text-gray-100">
               {formatCents(expensesCents)}
             </Text>
           </View>
@@ -64,7 +64,7 @@ export function MonthOverview({
       </View>
 
       {/* Balance */}
-      <View className="flex-row items-center justify-between pt-4 mt-4 border-t border-gray-100">
+      <View className="flex-row items-center justify-between pt-4 mt-4 border-t border-gray-100 dark:border-gray-700">
         <View className="flex-row items-center gap-2">
           <MaterialCommunityIcons
             name={balanceCents >= 0 ? "trending-up" : "trending-down"}

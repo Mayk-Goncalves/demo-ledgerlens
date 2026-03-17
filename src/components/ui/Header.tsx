@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useColorScheme } from "nativewind";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -17,6 +18,8 @@ export function Header({ children, bottomPadding = 0 }: HeaderProps) {
   const insets = useSafeAreaInsets();
   const [showNotifications, setShowNotifications] = useState(false);
   const unreadCount = useNotificationsStore((s) => s.unreadCount);
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
 
   return (
     <View
@@ -26,15 +29,15 @@ export function Header({ children, bottomPadding = 0 }: HeaderProps) {
       {/* Top row: branding + icons */}
       <View className="flex-row items-center justify-between">
         <Text className="text-2xl">
-          <Text className="font-bold text-white">Ledger</Text>
-          <Text className="font-light text-emerald-200">Lens</Text>
+          <Text className="font-bold text-white dark:text-gray-900">Ledger</Text>
+          <Text className="font-light text-emerald-200 dark:text-emerald-600">Lens</Text>
         </Text>
         <View className="flex-row items-center gap-4">
           <Pressable onPress={() => setShowNotifications(true)} hitSlop={8}>
             <MaterialCommunityIcons
               name="bell-outline"
               size={22}
-              color="#ffffff"
+              color={isDark ? "#111827" : "#ffffff"}
             />
             {unreadCount > 0 && (
               <View className="absolute -top-1.5 -right-1.5 h-4 w-4 items-center justify-center rounded-full bg-rose-500">

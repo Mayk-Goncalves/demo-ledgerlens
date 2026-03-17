@@ -256,7 +256,7 @@ export function TransactionFormModal({
               maxHeight: sheetMaxHeight,
               transform: [{ translateY: sheetTranslateY }],
             }}
-            className="pt-4 bg-gray-100 rounded-t-3xl"
+            className="pt-4 bg-gray-100 dark:bg-gray-800 rounded-t-3xl"
           >
             {/* Close button — also blocks taps from reaching dismiss layer */}
             <View

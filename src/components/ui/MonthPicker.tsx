@@ -47,7 +47,7 @@ export function MonthPicker({
         hitSlop={12}
         accessibilityLabel="Previous month"
       >
-        <Text className="text-lg font-semibold text-white/70">‹</Text>
+        <Text className="text-lg font-semibold text-white/70 dark:text-gray-500">‹</Text>
       </Pressable>
 
       <Pressable
@@ -55,13 +55,13 @@ export function MonthPicker({
         hitSlop={8}
         accessibilityLabel="Go to current month"
       >
-        <Text className="text-xl font-semibold text-emerald-100 min-w-[130px] text-center">
+        <Text className="text-xl font-semibold text-emerald-100 dark:text-emerald-700 min-w-[130px] text-center">
           {label}
         </Text>
       </Pressable>
 
       <Pressable onPress={onNext} hitSlop={12} accessibilityLabel="Next month">
-        <Text className="text-lg font-semibold text-white/70">›</Text>
+        <Text className="text-lg font-semibold text-white/70 dark:text-gray-500">›</Text>
       </Pressable>
     </View>
   );

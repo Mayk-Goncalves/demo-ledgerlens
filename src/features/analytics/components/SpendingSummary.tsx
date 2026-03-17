@@ -37,7 +37,7 @@ export function SpendingSummary({
 
   if (breakdown.length === 0) {
     return (
-      <View className="items-center justify-center rounded-2xl bg-white p-8 shadow-sm">
+      <View className="items-center justify-center rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-sm">
         <MaterialCommunityIcons
           name="chart-bar"
           size={40}
@@ -51,12 +51,12 @@ export function SpendingSummary({
   }
 
   return (
-    <View className="rounded-2xl bg-white p-5 shadow-sm">
+    <View className="rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm">
       <View className="flex-row items-center justify-between mb-5">
-        <Text className="text-base font-semibold text-gray-800">
+        <Text className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Spending by Category
         </Text>
-        <Text className="text-sm font-medium text-gray-500">
+        <Text className="text-sm font-medium text-gray-500 dark:text-gray-400">
           {formatCents(totalExpensesCents)}
         </Text>
       </View>

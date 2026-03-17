@@ -49,12 +49,12 @@ export const TransactionRow = memo(function TransactionRow({
   const handleReceiptClose = useCallback(() => setShowReceipt(false), []);
 
   return (
-    <View className="mb-2.5 flex-row items-center rounded-xl bg-white p-4 shadow-sm">
-      <View className="items-center justify-center w-10 h-10 rounded-full bg-emerald-50">
+    <View className="mb-2.5 flex-row items-center rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm">
+      <View className="items-center justify-center w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/30">
         <MaterialCommunityIcons name={icon} size={20} color="#059669" />
       </View>
       <View className="flex-1 ml-3">
-        <Text className="text-sm font-medium text-gray-800 capitalize">
+        <Text className="text-sm font-medium text-gray-800 dark:text-gray-100 capitalize">
           {transaction.category}
         </Text>
         {transaction.note ? (
@@ -67,7 +67,7 @@ export const TransactionRow = memo(function TransactionRow({
         <Pressable
           onPress={handleReceiptPress}
           hitSlop={10}
-          className="items-center justify-center w-9 h-9 mr-3 rounded-lg border border-dashed border-gray-300 bg-gray-50"
+          className="items-center justify-center w-9 h-9 mr-3 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
         >
           <MaterialCommunityIcons
             name="camera-outline"
@@ -78,12 +78,12 @@ export const TransactionRow = memo(function TransactionRow({
       ) : null}
       <View className="items-end">
         <Text
-          className={`text-sm font-semibold ${isIncome ? "text-emerald-600" : "text-gray-900"}`}
+          className={`text-sm font-semibold ${isIncome ? "text-emerald-600" : "text-gray-900 dark:text-gray-100"}`}
         >
           {sign}
           {formatCents(transaction.amount)}
         </Text>
-        <Text className="mt-0.5 text-xs text-gray-300">
+        <Text className="mt-0.5 text-xs text-gray-300 dark:text-gray-500">
           {new Date(transaction.createdAt).toLocaleTimeString(undefined, {
             hour: "numeric",
             minute: "2-digit",

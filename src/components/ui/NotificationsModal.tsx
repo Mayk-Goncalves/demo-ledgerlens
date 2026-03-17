@@ -25,10 +25,10 @@ export function NotificationsModal({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <View className="flex-1 bg-white px-6 pt-4">
+      <View className="flex-1 bg-white dark:bg-gray-900 px-6 pt-4">
         {/* Header */}
-        <View className="flex-row items-center justify-between pb-4 border-b border-gray-200">
-          <Text className="text-lg font-semibold text-gray-900">
+        <View className="flex-row items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+          <Text className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             Notifications
           </Text>
           <Pressable onPress={onClose} hitSlop={12}>
@@ -52,7 +52,7 @@ export function NotificationsModal({
               return (
                 <View
                   key={n.id}
-                  className={`mb-3 rounded-xl p-4 ${isRead ? "bg-gray-50" : "bg-emerald-50 border border-emerald-200"}`}
+                  className={`mb-3 rounded-xl p-4 ${isRead ? "bg-gray-50 dark:bg-gray-800" : "bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800"}`}
                 >
                   <View className="flex-row items-center gap-2 mb-2">
                     <MaterialCommunityIcons
@@ -61,7 +61,7 @@ export function NotificationsModal({
                       color={isRead ? "#9ca3af" : "#059669"}
                     />
                     <Text
-                      className={`flex-1 text-sm font-semibold ${isRead ? "text-gray-500" : "text-gray-900"}`}
+                      className={`flex-1 text-sm font-semibold ${isRead ? "text-gray-500" : "text-gray-900 dark:text-gray-100"}`}
                     >
                       {n.title}
                     </Text>
@@ -70,7 +70,7 @@ export function NotificationsModal({
                     )}
                   </View>
                   <Text
-                    className={`text-sm leading-5 ${isRead ? "text-gray-400" : "text-gray-600"}`}
+                    className={`text-sm leading-5 ${isRead ? "text-gray-400" : "text-gray-600 dark:text-gray-300"}`}
                   >
                     {n.body}
                   </Text>
