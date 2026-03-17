@@ -139,14 +139,17 @@ yarn start:tunnel
 
 > **Note:** Date range filtering beyond month navigation is not needed — the MonthPicker on the home screen already scopes all data by month, and the analytics screen reads from the same store.
 
-### Phase 5 — Tab Navigation & Polish 🔲
+### Phase 5 — Tab Navigation & Polish ✅
 
 > Wire screens together with proper navigation.
 
-- [ ] Set up bottom tab navigation
-- [ ] Add screen transitions
+- [x] Set up bottom tab navigation (Home, Analytics, Settings)
+- [x] Move home and analytics screens into tab layout
+- [x] Create Settings screen (profile, dev tools, about section)
+- [x] Remove push-based analytics navigation (now a tab)
+- [x] Polish MonthPicker text size and transactions padding
+- [x] Add screen transitions (fade on stack + tabs)
 - [ ] Implement dark mode support
-- [ ] Polish UI details and edge cases
 
 ### Phase 6 — Performance & Bundle Optimization 🔲
 
