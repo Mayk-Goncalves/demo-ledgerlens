@@ -8,7 +8,7 @@ export default function Index() {
 
   async function handleGetStarted() {
     await resetDatabase();
-    router.push("/home");
+    router.replace("/(tabs)");
   }
 
   return (

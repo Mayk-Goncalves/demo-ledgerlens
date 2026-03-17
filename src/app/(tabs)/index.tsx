@@ -17,7 +17,7 @@ import type {
   TransactionType,
 } from "@/types/transaction";
 
-export default function Home() {
+export default function HomeTab() {
   const [cardBleed, setCardBleed] = useState(0);
   const [showIncomeModal, setShowIncomeModal] = useState(false);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
@@ -127,7 +127,7 @@ export default function Home() {
         />
       </Header>
 
-      <View className="flex-1 p-6 rounded-t-3xl bg-gray-50">
+      <View className="flex-1 px-6 pt-6 pb-0 rounded-t-3xl bg-gray-50">
         <BalanceCard
           balanceCents={summary.balance}
           incomeCents={summary.income}
