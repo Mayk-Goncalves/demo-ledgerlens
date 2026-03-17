@@ -50,7 +50,11 @@ yarn start:tunnel
 
 ```
 ├── .github/
-│   └── copilot-instructions.md      # AI pair-programming guidelines
+│   ├── copilot-instructions.md      # AI pair-programming guidelines
+│   └── workflows/
+│       └── staging-update.yml       # Push to main → OTA staging update
+├── docs/
+│   └── performance.md               # Phase 6 benchmarks and analysis
 ├── src/
 │   ├── app/                         # Expo Router (file-based routing)
 │   ├── assets/images/               # Icons, splash, branding
@@ -163,14 +167,75 @@ yarn start:tunnel
 - [x] Target and verify 60 FPS scroll performance (profile and document)
 - [x] Document performance benchmarks
 
-### Phase 7 — CI/CD & Deployment 🔲
+### Phase 7 — CI/CD & Deployment ✅
 
 > Production-grade build and delivery pipeline.
 
-- [ ] Configure EAS Build
-- [ ] Configure EAS Update (OTA)
-- [ ] Set up GitHub Action: push to staging → OTA update
-- [ ] Document deployment workflow
+- [x] Configure EAS Build (development, preview, production profiles)
+- [x] Configure EAS Update (OTA via runtime version + channels)
+- [x] Set up GitHub Action: push to main → OTA update to staging channel
+- [x] Document deployment workflow
+
+---
+
+## Deployment
+
+### Build Profiles (`eas.json`)
+
+| Profile       | Purpose                          | Distribution | Channel       |
+| ------------- | -------------------------------- | ------------ | ------------- |
+| `development` | Dev client with hot reload       | Internal     | `development` |
+| `preview`     | Internal testing (APK / ad-hoc)  | Internal     | `staging`     |
+| `production`  | Store-ready release              | Store        | `production`  |
+
+```bash
+# Build a preview APK for testing
+npx eas build --profile preview --platform android
+
+# Build for production
+npx eas build --profile production --platform android
+```
+
+### OTA Updates (EAS Update)
+
+JS-only changes are delivered over-the-air without a full rebuild.
+The `runtimeVersion` uses the `appVersion` policy — updates are only compatible
+with builds of the same `version` in `app.json`.
+
+```bash
+# Push a manual OTA update to staging
+npx eas update --channel staging --message "fix: patch description"
+
+# Push to production
+npx eas update --channel production --message "feat: new feature"
+```
+
+### CI/CD (GitHub Actions)
+
+**Automated:** Every push to `main` triggers an OTA update to the `staging` channel
+via `.github/workflows/staging-update.yml`.
+
+**Setup required:** Add an `EXPO_TOKEN` secret to the GitHub repository.
+
+#### Creating the Expo token
+
+1. Go to [expo.dev/accounts/mayktg/settings/access-tokens](https://expo.dev/accounts/mayktg/settings/access-tokens)
+2. Click **Create token**
+3. Choose token type:
+   - **Robot** (recommended for CI) — not tied to your personal account, can be scoped and revoked independently
+   - **Personal** — simpler, uses your account's permissions directly
+4. Give it a descriptive name (e.g. `ledgerlens-github-ci`)
+5. Copy the generated token — you won't see it again
+
+#### Adding the secret to GitHub
+
+1. Go to your repo: [github.com/Mayk-Goncalves/demo-ledgerlens/settings/secrets/actions](https://github.com/Mayk-Goncalves/demo-ledgerlens/settings/secrets/actions)
+2. Click **New repository secret**
+3. Name: `EXPO_TOKEN`
+4. Value: paste the token from step above
+5. Click **Add secret**
+
+Once set, every push to `main` will automatically publish an OTA update to the `staging` channel.
 
 ---
 

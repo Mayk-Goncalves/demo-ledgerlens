@@ -47,6 +47,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19",
+    "eas-cli": "^18.4.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "expo-atlas": "^0.4.0",

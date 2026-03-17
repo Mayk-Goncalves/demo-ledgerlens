@@ -65,6 +65,19 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/99e3f8e2-885b-4ffc-b9ef-f72ec3a338de"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "99e3f8e2-885b-4ffc-b9ef-f72ec3a338de"
+      }
+    },
+    "owner": "mayktg"
   }
 }
