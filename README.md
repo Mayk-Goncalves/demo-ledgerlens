@@ -151,13 +151,13 @@ yarn start:tunnel
 - [x] Add screen transitions (fade on stack + tabs)
 - [x] Implement dark mode support (NativeWind useColorScheme, light/dark/system toggle in Settings)
 
-### Phase 6 — Performance & Bundle Optimization 🔲
+### Phase 6 — Performance & Bundle Optimization ✅
 
 > Measure, analyze, and optimize. See [docs/performance.md](docs/performance.md) for detailed metrics and rationale.
 
 - [x] Run Expo Atlas for bundle analysis
 - [x] Identify and remove heavy dependencies
-- [ ] Implement dynamic imports where beneficial
+- [x] ~~Implement dynamic imports where beneficial~~ — N/A: app code is 2.7% of bundle; framework code (51%) dominates. No lazy-loadable boundaries exist.
 - [x] Integrate FlashList for virtualized list performance
 - [x] Benchmark ScrollView vs FlashList with 1,000+ seeded transactions
 - [x] Target and verify 60 FPS scroll performance (profile and document)
