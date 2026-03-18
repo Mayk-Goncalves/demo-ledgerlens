@@ -219,17 +219,17 @@ via `.github/workflows/staging-update.yml`.
 
 #### Creating the Expo token
 
-1. Go to [expo.dev/accounts/mayktg/settings/access-tokens](https://expo.dev/accounts/mayktg/settings/access-tokens)
+1. Go to [expo.dev](https://expo.dev) → Account Settings → Access Tokens
 2. Click **Create token**
 3. Choose token type:
-   - **Robot** (recommended for CI) — not tied to your personal account, can be scoped and revoked independently
+   - **Robot** with **Developer** role (recommended for CI) — not tied to your personal account, can be scoped and revoked independently
    - **Personal** — simpler, uses your account's permissions directly
 4. Give it a descriptive name (e.g. `ledgerlens-github-ci`)
 5. Copy the generated token — you won't see it again
 
 #### Adding the secret to GitHub
 
-1. Go to your repo: [github.com/Mayk-Goncalves/demo-ledgerlens/settings/secrets/actions](https://github.com/Mayk-Goncalves/demo-ledgerlens/settings/secrets/actions)
+1. Go to your repo on GitHub → **Settings** → **Secrets and variables** → **Actions**
 2. Click **New repository secret**
 3. Name: `EXPO_TOKEN`
 4. Value: paste the token from step above
