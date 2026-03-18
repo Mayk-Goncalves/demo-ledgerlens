@@ -20,8 +20,5 @@
       "channel": "production",
       "autoIncrement": true
     }
-  },
-  "update": {
-    "channel": "staging"
   }
 }
